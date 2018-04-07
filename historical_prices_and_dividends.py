@@ -10,7 +10,8 @@ def _convert_epoch_to_datetime(epoch_seconds):
     return dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-def _convert_datetime_to_epoch(dt):
+def _convert_datetime_to_epoch(start):
+    dt = pd.to_datetime(start)
     epoch = datetime.datetime(1970, 1, 1)
 
     return int((dt - epoch).total_seconds())

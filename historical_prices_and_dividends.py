@@ -22,10 +22,10 @@ def _convert_datetime_to_epoch(start):
 # ticker(string) - stock ticker in caps, ex: AAPL, IBM, IVV
 # start_date(datetime) - earliest date to collect price for the given ticker
 # end_date(datetime) - latest date to collect price for the given ticker
-def get_historical_prices(ticker=None, start_date=datetime.datetime(2010, 1, 1), end_date=datetime.datetime.now()):
+def get_historical_prices(ticker=None, start='01/01/1970', end=datetime.now()):
     # convert datetimes to epoch
-    dstart_secs = _convert_datetime_to_epoch(start_date)
-    dend_secs = _convert_datetime_to_epoch(end_date)
+    dstart_secs = _convert_datetime_to_epoch(start)
+    dend_secs = _convert_datetime_to_epoch(end)
 
     # set url for yahoo finance with filled in parameters
     url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(
@@ -58,11 +58,11 @@ def get_historical_prices(ticker=None, start_date=datetime.datetime(2010, 1, 1),
 # ticker(string) - stock ticker in caps, ex: AAPL, IBM, IVV
 # start_date(datetime) - earliest date to collect price for the given ticker
 # end_date(datetime) - latest date to collect price for the given ticker
-def get_historical_dividends(ticker=None, start_date=datetime.datetime(2010, 1, 1), end_date=datetime.datetime.now()):
+def get_historical_dividends(ticker=None, start='01/01/1970', end=datetime.now()):
 
     # convert datetimes to epoch
-    dstart_secs = _convert_datetime_to_epoch(start_date)
-    dend_secs = _convert_datetime_to_epoch(end_date)
+    dstart_secs = _convert_datetime_to_epoch(start)
+    dend_secs = _convert_datetime_to_epoch(end)
 
     # set url for yahoo finance with filled in parameters
     url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(

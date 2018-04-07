@@ -22,7 +22,7 @@ def _convert_datetime_to_epoch(start):
 # ticker(string) - stock ticker in caps, ex: AAPL, IBM, IVV
 # start_date(datetime) - earliest date to collect price for the given ticker
 # end_date(datetime) - latest date to collect price for the given ticker
-def get_prices(ticker=None, start='01/01/1970', end=datetime.now()):
+def get_prices(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
     # convert datetimes to epoch
     dstart_secs = _convert_datetime_to_epoch(start)
     dend_secs = _convert_datetime_to_epoch(end)
@@ -58,7 +58,7 @@ def get_prices(ticker=None, start='01/01/1970', end=datetime.now()):
 # ticker(string) - stock ticker in caps, ex: AAPL, IBM, IVV
 # start_date(datetime) - earliest date to collect price for the given ticker
 # end_date(datetime) - latest date to collect price for the given ticker
-def get_divs(ticker=None, start='01/01/1970', end=datetime.now()):
+def get_divs(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
 
     # convert datetimes to epoch
     dstart_secs = _convert_datetime_to_epoch(start)

@@ -28,8 +28,8 @@ def get_prices(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
     dend_secs = _convert_datetime_to_epoch(end)
 
     # set url for yahoo finance with filled in parameters
-    url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(
-        ticker, dstart_secs, dend_secs)
+    url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(ticker, dstart_secs, dend_secs)
+        
     response = requests.get(url).content
 
     # find the json object in the response, format it, and load it
@@ -40,17 +40,13 @@ def get_prices(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
     json_string = response[22:len(response) - 2] + "}"
 
     mm = json.loads(json_string)
-    ticks = []
-    for row in mm["prices"]:
-        if "type" in row:
-            continue
-        else:
-            ticks.append(row)
-
-    df_ticks = pd.DataFrame.from_dict(ticks)
-    df_ticks["date"] = df_ticks["date"].apply(lambda x: _convert_epoch_to_datetime(x))
-
-    return df_ticks
+    df = pd.DataFrame(mm['prices'])
+    df["date"] = df["date"].apply(lambda x: _convert_epoch_to_datetime(x))
+    df.set_index('date', inplace=True)
+    df = df.sort_index()
+    df = df[['close', 'adjclose', 'volume']]
+    df = df.dropna()
+    return df
 
 
 # Collect historical dividends from yahoo finance for the given ticker for the time period of start_date to end_date.
@@ -65,8 +61,8 @@ def get_divs(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
     dend_secs = _convert_datetime_to_epoch(end)
 
     # set url for yahoo finance with filled in parameters
-    url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(
-        ticker, dstart_secs, dend_secs)
+    url = "https://finance.yahoo.com/quote/{0}/history?period1={1}&period2={2}&interval=1d&filter=history&frequency=1d".format(ticker, dstart_secs, dend_secs)
+        
 
     response = requests.get(url).content
 
@@ -82,9 +78,13 @@ def get_divs(ticker=None, start='01/01/1970', end=datetime.datetime.now()):
     for row in mm["prices"]:
         if "type" in row:
             dividends.append(row)
-
-    df_dividends = pd.DataFrame.from_dict(dividends)
+	df_dividends = pd.DataFrame.from_dict(dividends)
+	
+    
+    
     df_dividends["date"] = df_dividends["date"].apply(lambda x: _convert_epoch_to_datetime(x))
-    del df_dividends["data"]
-
+    df_dividends.set_index('date', inplace=True)
+    df_dividends = df_dividends[['amount']]
+    df_dividends = df_dividends.sort_index()
+    
     return df_dividends
